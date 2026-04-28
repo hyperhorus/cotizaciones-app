@@ -76,7 +76,7 @@ const generarPDF = async (req, res) => {
     doc.font('Helvetica-Bold')
       .fontSize(22)
       .fillColor('#ffffff')
-      .text('MI EMPRESA S.A. DE C.V.', 50, 30);
+      .text('Icaro Trading', 50, 30);
 
     doc.font('Helvetica')
       .fontSize(9)

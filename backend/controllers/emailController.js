@@ -3,17 +3,35 @@ const PDFDocument = require('pdfkit');
 const pool = require('../config/db');
 
 // Configurar transporter
+// const createTransporter = () => {
+//   return nodemailer.createTransport({
+//     host: process.env.SMTP_HOST || 'smtp.gmail.com',
+//     port: process.env.SMTP_PORT || 587,
+//     secure: false,
+//     auth: {
+//       user: process.env.SMTP_USER,
+//       pass: process.env.SMTP_PASS
+//     }
+//   });
+// };
+
+// Configurar transporter
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: process.env.SMTP_PORT || 587,
+    host: 'smtp.gmail.com',
+    port: 587,
     secure: false,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   });
 };
+
+
 
 // Generar PDF en buffer
 const generarPDFBuffer = async (id) => {
@@ -71,7 +89,7 @@ const generarPDFBuffer = async (id) => {
       // Header
       doc.rect(0, 0, doc.page.width, 100).fill(primaryColor);
       doc.font('Helvetica-Bold').fontSize(20).fillColor('#ffffff')
-        .text('MI EMPRESA S.A. DE C.V.', 50, 25);
+        .text('Icaro Trading', 50, 25);
       doc.font('Helvetica').fontSize(9).fillColor('#cccccc')
         .text('Tel: (55) 1234-5678 | ventas@miempresa.com', 50, 50);
       doc.font('Helvetica-Bold').fontSize(14).fillColor(accentColor)
@@ -182,7 +200,7 @@ const enviarCotizacionEmail = async (req, res) => {
       </head>
       <body>
         <div class="header">
-          <h1>MI EMPRESA S.A. DE C.V.</h1>
+          <h1>Icaro Trading</h1>
           <div class="folio">${cotizacion.folio}</div>
         </div>
         <div class="content">
@@ -201,8 +219,7 @@ const enviarCotizacionEmail = async (req, res) => {
           <div class="total-box">
             <div style="font-size: 14px; margin-bottom: 8px;">TOTAL DE LA COTIZACIÓN</div>
             <div class="total-amount">
-$$
-{Number(cotizacion.total).toLocaleString('es-MX', { minimumFractionDigits: 2 })} ${cotizacion.moneda}
+${Number(cotizacion.total).toLocaleString('es-MX', { minimumFractionDigits: 2 })} ${cotizacion.moneda}
             </div>
           </div>
 
@@ -212,7 +229,7 @@ $$
           <br/>
           <p>Saludos cordiales,<br/>
           <strong>${cotizacion.vendedor_nombre || 'Departamento de Ventas'}</strong><br/>
-          MI EMPRESA S.A. DE C.V.</p>
+          Icaro Trading</p>
         </div>
         <div class="footer">
           Este correo fue enviado desde el Sistema de Cotizaciones.<br/>
@@ -224,9 +241,9 @@ $$
 
     // Enviar email
     const mailOptions = {
-      from: `"MI EMPRESA" <${process.env.SMTP_USER}>`,
+      from: `"Icaro Trading" <${process.env.SMTP_USER}>`,
       to: email_destino,
-      subject: asunto || `Cotización ${cotizacion.folio} - MI EMPRESA`,
+      subject: asunto || `Cotización ${cotizacion.folio} - Icaro Trading`,
       html: htmlEmail,
       attachments: [
         {

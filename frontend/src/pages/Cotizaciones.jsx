@@ -382,7 +382,7 @@ const handleOpenEmailModal = (cotizacion) => {
   setSelectedCotizacion(cotizacion);
   setEmailForm({
     email_destino: cotizacion.cliente_email || '',
-    asunto: `Cotización ${cotizacion.folio} - MI EMPRESA`,
+    asunto: `Cotización ${cotizacion.folio} - Icaro Trading`,
     mensaje: `Estimado(a) ${cotizacion.cliente_nombre}, le hacemos llegar la cotización ${cotizacion.folio} para su consideración. Quedamos atentos a sus comentarios.`
   });
   setShowEmailModal(true);
